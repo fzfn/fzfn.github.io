@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>信士电话销售外包</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+		<link rel="stylesheet" type="text/css" href="./css/base.css">
+		<style>
+			body,html{
+				background:#fff;
+			}
+			.index{
+				position: relative;
+				padding-bottom:60px;
+			}
+			
+			.need .desc{
+				font-size:12px;
+				<!--color:#999;-->
+			}
+			.footer{
+				position:fixed;
+				left:0;
+				right:0;
+				bottom:0;
+				background:#fff;
+				z-index:9999;
+			}
+			.footer>div{				
+				padding:15px 10px;
+				text-align:center;
+			}
+			.btn-order {
+				color:#fff;
+				background:#ff9934;
+			}
+			
+			.select{
+				
+			}
+			.item{
+				position:relative;
+				padding: 10px 10px 10px 27px;
+			}
+			.item>div{
+				padding-bottom:10px;
+			}
+			.NumBtn span{
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			.BtnNumDown{
+				width: 20px;
+				padding-top: 20px;
+				background-image: url('./images/down.png');
+				background-size: 100%;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+			
+			.BtnNumUp{
+				margin-left: 10px;
+				width: 20px;
+				padding-top: 20px;
+				background-image: url('./images/up.png');
+				background-size: 100%;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+			span.BuyNum {
+				padding: 1px 10px;
+				min-width: 60px;
+				text-align: right;
+			}
+			.num{
+				color:red;
+				font-size:18px;
+				padding:0 8px;
+			}
+			
+			.total{
+				padding-right:20px;
+				text-align:right;
+				font-size:22px;
+				font-weight: bold;
+			}
+			.total .num{
+				font-size:24px;
+			}
+			
+			.btn_bottom_order{
+				position: absolute;
+				top: 0%;
+				height: 100%;
+				left: 0%;
+				width: 100%;
+				z-index: 2;
+			}
+    </style>
+</head>
+<body>
+<div class="index">
+	<div style="position:relative;">
+		<img src="./images/step1-1.png">
+	</div>
+	<div  class="item select" style="font-weight:bold;">
+		<div class="Customer NumBtn" data-step="1000">
+			<span>您需要沟通的客户数量 </span>
+			<span class="BtnNumDown" onclick=""></span>
+			<span class="BuyNum">5000</span>人
+			<span class="BtnNumUp" onclick=""></span>
+		</div>
+		<div class="Time NumBtn" data-step="1">
+			<span>需要几天完成 </span>
+			<span style="width:60px"></span>		
+			<span class="BtnNumDown" onclick=""></span>
+			<span class="BuyNum">1</span>天
+			<span class="BtnNumUp" onclick=""></span>
+		</div>
+	</div>
+	
+	<div class="item need">
+		<div style="font-weight:bold;"><span>系统计算，您需要坐席数量为</span><span class="num">--</span>人天</div>
+		<div class="desc">（沟通客户数5000个起订，每个外包坐席触达客户 1000个/天，每个外包坐席收费 450元/人天）</div>
+	</div>
+	
+	<div class="item list">
+		<div class="sprice"><span>外包人力服务费</span><span class="num">--</span>元</div>
+		<div class="hprice"><span>话费</span><span style="display:inline-block;width:80px"></span><span class="num">--</span>元</div>
+	</div>
+	<div class="item total">
+		<div class="tprice"><span>费用总计</span><span class="num">--</span>元</div>
+	</div>
+	<div class="footer display_flex flex_c">
+		<div class="flex_1 btn-order create-order" onclick="">下一步</div>
+	</div>
+</div>
+<div style="position:relative;padding-bottom:120px">
+	<img src="./images/step1-2.png">
+	<div class="btn_bottom_order btn_bottom_create-order" onclick=""></div>
+</div>
+<script>
+
+	document.querySelector(".btn_bottom_create-order").onclick = function (e) {
+		window.location.href = 'step2.html';
+    };
+	document.querySelector(".create-order").onclick = function (e) {
+		window.location.href = 'step2.html';
+    };
+	
+	//减数量按钮
+	document.querySelector(".Customer .BtnNumDown").onclick = function (e) {
+		e.stopPropagation();
+		var intCurNum = parseInt(document.querySelector(".Customer .BuyNum").innerHTML);
+		var step = parseInt(document.querySelector(".Customer .BuyNum").parentElement.getAttribute("data-step"));
+		if(intCurNum > step) {
+			if(intCurNum-step < 5000) {
+				document.querySelector(".Customer .BuyNum").innerHTML = intCurNum;
+			}else{
+				document.querySelector(".Customer .BuyNum").innerHTML = parseInt(intCurNum-step);
+			}
+		}else{
+			document.querySelector(".Customer .BuyNum").innerHTML = step;
+		}
+		updateGoodsTotalPrice();
+	};
+	
+	//加数量按钮
+	document.querySelector(".Customer .BtnNumUp").onclick = function (e) {
+		e.stopPropagation();
+		var intCurNum = parseInt(document.querySelector(".Customer .BuyNum").innerHTML);
+		var step = parseInt(document.querySelector(".Customer .BuyNum").parentElement.getAttribute("data-step"));
+		if(intCurNum){
+			document.querySelector(".Customer .BuyNum").innerHTML  = parseInt(intCurNum+step);
+		}
+		updateGoodsTotalPrice();
+	};
+	
+		//减数量按钮
+	document.querySelector(".Time .BtnNumDown").onclick = function (e) {
+		e.stopPropagation();
+		var intCurNum = parseInt(document.querySelector(".Time .BuyNum").innerHTML);
+		var step = parseInt(document.querySelector(".Time .BuyNum").parentElement.getAttribute("data-step"));
+		if(intCurNum > step) {
+			document.querySelector(".Time .BuyNum").innerHTML = parseInt(intCurNum-step);
+		}else{
+			document.querySelector(".Time .BuyNum").innerHTML = step;
+		}
+		updateGoodsTotalPrice();
+	};
+	
+	//加数量按钮
+	document.querySelector(".Time .BtnNumUp").onclick = function (e) {
+		e.stopPropagation();
+		var intCurNum = parseInt(document.querySelector(".Time .BuyNum").innerHTML);
+		var step = parseInt(document.querySelector(".Time .BuyNum").parentElement.getAttribute("data-step"));
+		if(intCurNum){
+			document.querySelector(".Time .BuyNum").innerHTML  = parseInt(intCurNum+step);
+		}
+		updateGoodsTotalPrice();
+	};
+	
+	updateGoodsTotalPrice();
+	function updateGoodsTotalPrice() {
+            
+		var Customer =  parseInt(document.querySelector(".Customer .BuyNum").innerHTML);
+		var Time =  parseInt(document.querySelector(".Time .BuyNum").innerHTML);
+		
+		document.querySelector(".need .num").innerHTML = Math.ceil(Customer/1000);
+		document.querySelector(".sprice .num").innerHTML = Math.ceil(Customer/1000*450);
+		document.querySelector(".hprice .num").innerHTML = Math.ceil(Customer*0.4*0.1);
+		document.querySelector(".tprice .num").innerHTML = Math.ceil(Customer/1000*450) + Math.ceil(Customer*0.4*0.1);
+    }
+	
+</script>
+
+
+</body></html>
